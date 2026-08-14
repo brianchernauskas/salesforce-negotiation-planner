@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-N5E1D26WRG"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-N5E1D26WRG');</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Salesforce Renewal Negotiation Planner</title>
+  <link rel="stylesheet" href="src/styles.css" />
+</head>
+<body>
+<script>(function(){const H='e1af9770edb5a9358db28d25520d54b0e5aeb7bdaa6fed238cebea143d1560bb';if(localStorage.getItem('proxima-auth')!==H)window.location.replace('https://brianchernauskas.github.io/proxima-tools-hub/');})()</script>
+  <div id="app">
+    <header class="app-header">
+      <div class="header-inner">
+        <div class="logo">
+          <svg width="84" height="22" viewBox="0 0 84 22" fill="none" xmlns="http://www.w3.org/2000/svg"><text x="0" y="18" font-family="Georgia, 'Times New Roman', serif" font-size="18" font-weight="700" fill="#ffffff" letter-spacing="-0.3">Proxima</text></svg>
+          <span class="logo-divider"></span>
+          <span>Salesforce Negotiation Planner</span>
+        </div>
+        <div class="header-taglines">
+          <div class="header-tagline">World-class renewal strategy, tailored to your situation</div>
+          <div class="header-tagline">Intended for Proxima use only, please contact Brian Chernauskas with questions</div>
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <!-- Step indicator -->
+      <div class="step-nav" id="step-nav">
+        <div class="step-item active" data-step="1">
+          <div class="step-circle">1</div>
+          <div class="step-label">Org Profile</div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step-item" data-step="2">
+          <div class="step-circle">2</div>
+          <div class="step-label">Contract &amp; Spend</div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step-item" data-step="3">
+          <div class="step-circle">3</div>
+          <div class="step-label">Products &amp; Usage</div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step-item" data-step="4">
+          <div class="step-circle">4</div>
+          <div class="step-label">Leverage</div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step-item" data-step="5">
+          <div class="step-circle">5</div>
+          <div class="step-label">Your Strategy</div>
+        </div>
+      </div>
+
+      <!-- ══ Step 1: Org Profile ══ -->
+      <section class="step-panel active" id="step-1">
+        <div class="panel-header">
+          <h2>Organization Profile</h2>
+          <p>Salesforce prices on seats and segments accounts by size. Start with who you are.</p>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Company Size</label>
+            <div class="radio-cards" id="company-size">
+              <div class="radio-card" data-value="smb">
+                <div class="rc-icon">🏢</div>
+                <div class="rc-title">SMB</div>
+                <div class="rc-desc">&lt;500 employees</div>
+              </div>
+              <div class="radio-card" data-value="midmarket">
+                <div class="rc-icon">🏬</div>
+                <div class="rc-title">Mid-Market</div>
+                <div class="rc-desc">500–4,999 employees</div>
+              </div>
+              <div class="radio-card" data-value="enterprise">
+                <div class="rc-icon">🏛️</div>
+                <div class="rc-title">Enterprise</div>
+                <div class="rc-desc">5,000–24,999</div>
+              </div>
+              <div class="radio-card" data-value="global">
+                <div class="rc-icon">🌐</div>
+                <div class="rc-title">Global Enterprise</div>
+                <div class="rc-desc">25,000+ employees</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="industry">Industry Vertical</label>
+              <select id="industry">
+                <option value="">Select industry…</option>
+                <option value="fintech">Financial Services / Insurance</option>
+                <option value="healthcare">Healthcare / Life Sciences</option>
+                <option value="retail">Retail / Consumer Goods</option>
+                <option value="saas">Technology / SaaS</option>
+                <option value="manufacturing">Manufacturing / Industrial</option>
+                <option value="media">Media / Communications</option>
+                <option value="government">Government / Public Sector</option>
+                <option value="education">Education / Nonprofit</option>
+                <option value="energy">Energy / Utilities</option>
+                <option value="proserv">Professional Services</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="headcount-trajectory">Headcount Trajectory (next 12–24 mo)</label>
+              <select id="headcount-trajectory">
+                <option value="">Select…</option>
+                <option value="shrinking">Shrinking — layoffs or restructuring</option>
+                <option value="flat">Flat — no material change</option>
+                <option value="modest">Modest growth (0–10%)</option>
+                <option value="strong">Strong growth (10–30%)</option>
+                <option value="aggressive">Aggressive growth (30%+)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="sf-tenure">Salesforce Tenure</label>
+              <select id="sf-tenure">
+                <option value="">Select…</option>
+                <option value="under2">Under 2 years</option>
+                <option value="2-5">2–5 years</option>
+                <option value="5-10">5–10 years</option>
+                <option value="10plus">10+ years</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="primary-edition">Primary Edition</label>
+              <select id="primary-edition">
+                <option value="">Select…</option>
+                <option value="professional">Professional</option>
+                <option value="enterprise">Enterprise</option>
+                <option value="unlimited">Unlimited</option>
+                <option value="einstein1">Einstein 1 / Agentforce</option>
+                <option value="mixed">Mixed across business units</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Regulatory / Compliance Constraints</label>
+            <div class="checkbox-group" id="compliance">
+              <label class="checkbox-item"><input type="checkbox" value="hipaa" /> HIPAA</label>
+              <label class="checkbox-item"><input type="checkbox" value="fedramp" /> FedRAMP / GovCloud</label>
+              <label class="checkbox-item"><input type="checkbox" value="gdpr" /> GDPR / EU data residency</label>
+              <label class="checkbox-item"><input type="checkbox" value="pci" /> PCI-DSS</label>
+              <label class="checkbox-item"><input type="checkbox" value="sox" /> SOX / financial controls</label>
+              <label class="checkbox-item"><input type="checkbox" value="none" /> None material</label>
+            </div>
+          </div>
+        </div>
+        <div class="step-actions">
+          <button class="btn-primary" onclick="nextStep(1)">Continue →</button>
+        </div>
+      </section>
+
+      <!-- ══ Step 2: Contract & Spend ══ -->
+      <section class="step-panel" id="step-2">
+        <div class="panel-header">
+          <h2>Contract &amp; Spend</h2>
+          <p>Renewal timing against Salesforce's fiscal calendar is the single biggest lever available to you. Their fiscal year ends January 31.</p>
+        </div>
+        <div class="form-grid">
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="annual-spend">Annual Contract Value (ACV)</label>
+              <select id="annual-spend">
+                <option value="">Select ACV…</option>
+                <option value="under100k">Under $100K</option>
+                <option value="100k-250k">$100K–$250K</option>
+                <option value="250k-500k">$250K–$500K</option>
+                <option value="500k-1m">$500K–$1M</option>
+                <option value="1m-2500k">$1M–$2.5M</option>
+                <option value="2500k-5m">$2.5M–$5M</option>
+                <option value="5m-10m">$5M–$10M</option>
+                <option value="10mplus">$10M+</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="total-seats">Total Licensed Seats (all clouds)</label>
+              <select id="total-seats">
+                <option value="">Select…</option>
+                <option value="under100">Under 100</option>
+                <option value="100-500">100–500</option>
+                <option value="500-2000">500–2,000</option>
+                <option value="2000-10000">2,000–10,000</option>
+                <option value="10000plus">10,000+</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="renewal-month">Contract Renewal Month</label>
+              <select id="renewal-month">
+                <option value="">Select month…</option>
+                <option value="1">January — SF fiscal year end</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April — Q1 end</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July — Q2 end</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October — Q3 end</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="renewal-timeline">Time Until Renewal</label>
+              <select id="renewal-timeline">
+                <option value="">Select…</option>
+                <option value="within-1mo">Less than 30 days</option>
+                <option value="1-3mo">1–3 months</option>
+                <option value="3-6mo">3–6 months</option>
+                <option value="6-12mo">6–12 months</option>
+                <option value="12plusmo">More than 12 months</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="notice-status">Auto-Renewal Notice Window</label>
+              <select id="notice-status">
+                <option value="">Select…</option>
+                <option value="unknown">Don't know what our notice period is</option>
+                <option value="passed">Already passed — auto-renewal triggered</option>
+                <option value="imminent">Closing within 30 days</option>
+                <option value="open">Still open with room to spare</option>
+                <option value="served">Notice already served to Salesforce</option>
+                <option value="none">No auto-renewal clause</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="current-term">Current Contract Term</label>
+              <select id="current-term">
+                <option value="">Select…</option>
+                <option value="1yr">1 year</option>
+                <option value="2yr">2 years</option>
+                <option value="3yr">3 years</option>
+                <option value="3plusyr">More than 3 years</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="last-uplift">Uplift Applied at Last Renewal</label>
+              <select id="last-uplift">
+                <option value="">Select…</option>
+                <option value="none">None — flat renewal</option>
+                <option value="under5">Under 5%</option>
+                <option value="5-10">5–10%</option>
+                <option value="10-20">10–20%</option>
+                <option value="over20">Over 20%</option>
+                <option value="first">First renewal — no history</option>
+                <option value="unknown">Don't know</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="uplift-cap">Existing Uplift Cap in Contract</label>
+              <select id="uplift-cap">
+                <option value="">Select…</option>
+                <option value="none">No cap — Salesforce sets the number</option>
+                <option value="capped-high">Capped, but above 7%</option>
+                <option value="capped-mid">Capped at 4–7%</option>
+                <option value="capped-low">Capped at 3% or below</option>
+                <option value="unknown">Don't know</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="desired-term">Desired Term at Renewal</label>
+              <select id="desired-term">
+                <option value="">Select…</option>
+                <option value="1yr">1 year — maximum flexibility</option>
+                <option value="2yr">2 years</option>
+                <option value="3yr">3 years — best pricing leverage</option>
+                <option value="undecided">Undecided — want modelling</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="payment-terms">Current Payment Terms</label>
+              <select id="payment-terms">
+                <option value="">Select…</option>
+                <option value="annual-upfront">Annual, paid upfront</option>
+                <option value="quarterly">Quarterly</option>
+                <option value="monthly">Monthly</option>
+                <option value="multiyear-upfront">Multi-year prepaid</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="step-actions">
+          <button class="btn-secondary" onclick="prevStep(2)">← Back</button>
+          <button class="btn-primary" onclick="nextStep(2)">Continue →</button>
+        </div>
+      </section>
+
+      <!-- ══ Step 3: Products & Usage ══ -->
+      <section class="step-panel" id="step-3">
+        <div class="panel-header">
+          <h2>Product Footprint &amp; Utilization</h2>
+          <p>Renewal is the only moment most Salesforce contracts permit reducing licenses. Unused seats are the largest recoverable cost in a typical estate.</p>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Clouds &amp; Products Owned</label>
+            <div class="use-case-grid" id="products">
+              <div class="use-case-card" data-value="sales"><div class="uc-icon">💼</div><div class="uc-title">Sales Cloud</div></div>
+              <div class="use-case-card" data-value="service"><div class="uc-icon">🎧</div><div class="uc-title">Service Cloud</div></div>
+              <div class="use-case-card" data-value="marketing"><div class="uc-icon">📣</div><div class="uc-title">Marketing Cloud</div></div>
+              <div class="use-case-card" data-value="commerce"><div class="uc-icon">🛒</div><div class="uc-title">Commerce Cloud</div></div>
+              <div class="use-case-card" data-value="experience"><div class="uc-icon">🌐</div><div class="uc-title">Experience Cloud</div></div>
+              <div class="use-case-card" data-value="fieldservice"><div class="uc-icon">🔧</div><div class="uc-title">Field Service</div></div>
+              <div class="use-case-card" data-value="cpq"><div class="uc-icon">🧾</div><div class="uc-title">CPQ / Revenue Cloud</div></div>
+              <div class="use-case-card" data-value="slack"><div class="uc-icon">💬</div><div class="uc-title">Slack</div></div>
+              <div class="use-case-card" data-value="tableau"><div class="uc-icon">📊</div><div class="uc-title">Tableau</div></div>
+              <div class="use-case-card" data-value="mulesoft"><div class="uc-icon">🔗</div><div class="uc-title">MuleSoft</div></div>
+              <div class="use-case-card" data-value="datacloud"><div class="uc-icon">🗄️</div><div class="uc-title">Data Cloud</div></div>
+              <div class="use-case-card" data-value="agentforce"><div class="uc-icon">🤖</div><div class="uc-title">Agentforce / Einstein</div></div>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="license-utilization">License Utilization (active users ÷ licensed seats)</label>
+              <select id="license-utilization">
+                <option value="">Select…</option>
+                <option value="under60">Under 60% — significant shelfware</option>
+                <option value="60-75">60–75%</option>
+                <option value="75-90">75–90%</option>
+                <option value="over90">Over 90% — tightly managed</option>
+                <option value="unknown">Never measured</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="contract-structure">Order Form Structure</label>
+              <select id="contract-structure">
+                <option value="">Select…</option>
+                <option value="single">Single co-termed order form</option>
+                <option value="cotermed">Multiple order forms, co-termed</option>
+                <option value="staggered">Multiple order forms, staggered dates</option>
+                <option value="unknown">Don't know</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="support-tier">Support Tier</label>
+              <select id="support-tier">
+                <option value="">Select…</option>
+                <option value="standard">Standard (included)</option>
+                <option value="premier">Premier Success</option>
+                <option value="signature">Signature Success</option>
+                <option value="unknown">Don't know</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="adoption-health">Adoption Health</label>
+              <select id="adoption-health">
+                <option value="">Select…</option>
+                <option value="poor">Poor — low login rates, workarounds common</option>
+                <option value="mixed">Mixed — strong in some teams, weak in others</option>
+                <option value="good">Good — broadly embedded</option>
+                <option value="critical">Critical — system of record, cannot operate without it</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Known Cost Pressures</label>
+            <div class="checkbox-group" id="cost-pressures">
+              <label class="checkbox-item"><input type="checkbox" value="shelfware" /> Known unused licenses</label>
+              <label class="checkbox-item"><input type="checkbox" value="overlap" /> Overlapping tools (duplicate capability)</label>
+              <label class="checkbox-item"><input type="checkbox" value="addons" /> Add-ons bought mid-term at list</label>
+              <label class="checkbox-item"><input type="checkbox" value="sandbox" /> Sandbox / storage overages</label>
+              <label class="checkbox-item"><input type="checkbox" value="api" /> API call limit overages</label>
+              <label class="checkbox-item"><input type="checkbox" value="premier" /> Premier support renewing automatically</label>
+              <label class="checkbox-item"><input type="checkbox" value="none" /> None identified</label>
+            </div>
+          </div>
+        </div>
+        <div class="step-actions">
+          <button class="btn-secondary" onclick="prevStep(3)">← Back</button>
+          <button class="btn-primary" onclick="nextStep(3)">Continue →</button>
+        </div>
+      </section>
+
+      <!-- ══ Step 4: Leverage ══ -->
+      <section class="step-panel" id="step-4">
+        <div class="panel-header">
+          <h2>Leverage &amp; Context</h2>
+          <p>Salesforce prices against switching cost. What you can credibly do instead determines what you can ask for.</p>
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Competitive Alternative</label>
+            <div class="radio-cards" id="alternative">
+              <div class="radio-card" data-value="none">
+                <div class="rc-icon">🔒</div>
+                <div class="rc-title">None</div>
+                <div class="rc-desc">Salesforce is the only option</div>
+              </div>
+              <div class="radio-card" data-value="theoretical">
+                <div class="rc-icon">💭</div>
+                <div class="rc-title">Theoretical</div>
+                <div class="rc-desc">Alternatives exist, none evaluated</div>
+              </div>
+              <div class="radio-card" data-value="evaluating">
+                <div class="rc-icon">🔍</div>
+                <div class="rc-title">Evaluating</div>
+                <div class="rc-desc">Active RFP or pilot underway</div>
+              </div>
+              <div class="radio-card" data-value="dual">
+                <div class="rc-icon">⚖️</div>
+                <div class="rc-title">Already Dual</div>
+                <div class="rc-desc">Running a competing platform</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="alternative-vendor">Most Credible Alternative Platform</label>
+              <select id="alternative-vendor">
+                <option value="">Select…</option>
+                <option value="dynamics">Microsoft Dynamics 365</option>
+                <option value="hubspot">HubSpot</option>
+                <option value="servicenow">ServiceNow</option>
+                <option value="sap">SAP</option>
+                <option value="oracle">Oracle</option>
+                <option value="zoho">Zoho</option>
+                <option value="custom">Build / custom platform</option>
+                <option value="none">No credible alternative</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="relationship-quality">Salesforce Account Team Relationship</label>
+              <select id="relationship-quality">
+                <option value="">Select…</option>
+                <option value="none">No dedicated AE</option>
+                <option value="poor">Weak / transactional</option>
+                <option value="moderate">Moderate — occasional contact</option>
+                <option value="strong">Strong — regular cadence with AE</option>
+                <option value="strategic">Strategic — executive sponsorship</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="previous-negotiation">Prior Negotiation Experience</label>
+              <select id="previous-negotiation">
+                <option value="">Select…</option>
+                <option value="none">Never negotiated — accepted renewal quotes</option>
+                <option value="basic">Basic — asked for minor concessions</option>
+                <option value="moderate">Moderate — negotiated discounts before</option>
+                <option value="experienced">Experienced — multiple full cycles</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="internal-champion">Internal Decision Owner</label>
+              <select id="internal-champion">
+                <option value="">Select…</option>
+                <option value="cio">CIO / CTO</option>
+                <option value="cfo">CFO / Finance</option>
+                <option value="procurement">Procurement / Vendor Management</option>
+                <option value="revops">RevOps / Sales Ops</option>
+                <option value="business">Business unit owner</option>
+                <option value="none">No clear owner</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Change Events in the Coming Term</label>
+            <div class="checkbox-group" id="change-events">
+              <label class="checkbox-item"><input type="checkbox" value="expansion" /> Planned expansion — new clouds or seats</label>
+              <label class="checkbox-item"><input type="checkbox" value="mna" /> M&amp;A adding users</label>
+              <label class="checkbox-item"><input type="checkbox" value="divestiture" /> Divestiture reducing users</label>
+              <label class="checkbox-item"><input type="checkbox" value="consolidation" /> Consolidating onto Salesforce from other tools</label>
+              <label class="checkbox-item"><input type="checkbox" value="migration" /> Evaluating migration away from Salesforce</label>
+              <label class="checkbox-item"><input type="checkbox" value="agentforce" /> Salesforce pushing Agentforce / AI adoption</label>
+              <label class="checkbox-item"><input type="checkbox" value="none" /> No material changes</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="negotiation-goals">Primary Negotiation Goal</label>
+            <select id="negotiation-goals">
+              <option value="">Select primary goal…</option>
+              <option value="cost-reduction">Reduce total cost versus current spend</option>
+              <option value="cap-uplift">Cap future price increases</option>
+              <option value="flexibility">Maximize flexibility to reduce seats later</option>
+              <option value="consolidate">Consolidate contracts and simplify</option>
+              <option value="expansion-value">Get best pricing on planned expansion</option>
+              <option value="balanced">Balanced — cost, terms, and flexibility</option>
+            </select>
+          </div>
+        </div>
+        <div class="step-actions">
+          <button class="btn-secondary" onclick="prevStep(4)">← Back</button>
+          <button class="btn-primary" onclick="generateStrategy()">Generate My Strategy →</button>
+        </div>
+      </section>
+
+      <!-- ══ Step 5: Output ══ -->
+      <section class="step-panel" id="step-5">
+        <div id="strategy-output"></div>
+        <div class="step-actions" style="margin-top:2rem;">
+          <button class="btn-secondary" onclick="prevStep(5)">← Edit Inputs</button>
+          <button class="btn-primary" onclick="printStrategy()">🖨️ Export Strategy</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <p>This tool provides strategic guidance based on publicly reported Salesforce contracting practices and procurement benchmarks. Salesforce does not publish renewal uplift or discount data — all ranges are directional estimates, not vendor-confirmed figures. Actual outcomes depend on account team priorities, timing within Salesforce's fiscal year, and your credible alternatives.</p>
+    </footer>
+  </div>
+
+  <script src="src/app.js"></script>
+</body>
+</html>
