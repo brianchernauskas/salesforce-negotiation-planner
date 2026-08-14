@@ -584,8 +584,11 @@ select:focus, input[type="text"]:focus {
 /* ── Print ── */
 @media print {
   .app-header, .step-nav, .step-actions, .app-footer { display: none !important; }
-  .step-panel { display: block !important; }
-  #step-1, #step-2, #step-3, #step-4 { display: none !important; }
+  /* Print whatever panel is on screen. Do NOT hard-code step ids here — the
+     output panel's number changes when steps are added or removed, and an id
+     list silently prints a blank page when it drifts. */
+  .step-panel { display: none !important; }
+  .step-panel.active { display: block !important; }
   body { background: #fff; }
   .strategy-hero { background: var(--aws-dark) !important; -webkit-print-color-adjust: exact; }
   .print-proxima-header { display: flex !important; }
@@ -601,14 +604,14 @@ select:focus, input[type="text"]:focus {
   gap: 10px;
   padding: 12px 0 10px;
   margin-bottom: 8px;
-  border-bottom: 2px solid #232f3e;
+  border-bottom: 2px solid #032D60;
 }
 .print-proxima-header .print-logo-text {
   font-family: Georgia, 'Times New Roman', serif;
   font-size: 18px;
   font-weight: 700;
   letter-spacing: -0.3px;
-  color: #232f3e;
+  color: #032D60;
 }
 .print-proxima-header .print-divider {
   display: inline-block;
