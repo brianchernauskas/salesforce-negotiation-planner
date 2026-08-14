@@ -43,12 +43,11 @@ function goToStep(n) {
 // ─── Validation ───────────────────────────────────────────────────────────────
 function validateStep(step) {
   const requiredSelects = {
-    1: ['industry', 'headcount-trajectory', 'sf-tenure', 'primary-edition'],
-    2: ['annual-spend', 'total-seats', 'renewal-month', 'renewal-timeline', 'notice-status', 'current-term'],
-    3: ['license-utilization', 'contract-structure', 'adoption-health'],
-    4: ['relationship-quality', 'negotiation-goals'],
+    1: ['annual-spend', 'headcount-trajectory', 'renewal-month', 'renewal-timeline', 'notice-status'],
+    2: ['license-utilization', 'contract-structure', 'adoption-health'],
+    3: ['relationship-quality'],
   };
-  const requiredCards = { 1: ['company-size'], 4: ['alternative'] };
+  const requiredCards = { 1: ['company-size'], 3: ['alternative'] };
 
   let ok = true;
   (requiredSelects[step] || []).forEach(id => {
@@ -84,25 +83,16 @@ function validateStep(step) {
 function collectStep(step) {
   if (step === 1) {
     state.companySize = document.querySelector('#company-size .selected')?.dataset.value;
-    state.industry = document.getElementById('industry').value;
-    state.headcountTrajectory = document.getElementById('headcount-trajectory').value;
-    state.sfTenure = document.getElementById('sf-tenure').value;
-    state.primaryEdition = document.getElementById('primary-edition').value;
-    state.compliance = [...document.querySelectorAll('#compliance input:checked')].map(i => i.value);
-  }
-  if (step === 2) {
     state.annualSpend = document.getElementById('annual-spend').value;
-    state.totalSeats = document.getElementById('total-seats').value;
+    state.headcountTrajectory = document.getElementById('headcount-trajectory').value;
     state.renewalMonth = document.getElementById('renewal-month').value;
     state.renewalTimeline = document.getElementById('renewal-timeline').value;
     state.noticeStatus = document.getElementById('notice-status').value;
-    state.currentTerm = document.getElementById('current-term').value;
-    state.lastUplift = document.getElementById('last-uplift').value;
     state.upliftCap = document.getElementById('uplift-cap').value;
+    state.lastUplift = document.getElementById('last-uplift').value;
     state.desiredTerm = document.getElementById('desired-term').value;
-    state.paymentTerms = document.getElementById('payment-terms').value;
   }
-  if (step === 3) {
+  if (step === 2) {
     state.products = [...document.querySelectorAll('#products .selected')].map(c => c.dataset.value);
     state.licenseUtilization = document.getElementById('license-utilization').value;
     state.contractStructure = document.getElementById('contract-structure').value;
@@ -110,14 +100,13 @@ function collectStep(step) {
     state.adoptionHealth = document.getElementById('adoption-health').value;
     state.costPressures = [...document.querySelectorAll('#cost-pressures input:checked')].map(i => i.value);
   }
-  if (step === 4) {
+  if (step === 3) {
     state.alternative = document.querySelector('#alternative .selected')?.dataset.value;
     state.alternativeVendor = document.getElementById('alternative-vendor').value;
     state.relationshipQuality = document.getElementById('relationship-quality').value;
     state.previousNegotiation = document.getElementById('previous-negotiation').value;
     state.internalChampion = document.getElementById('internal-champion').value;
     state.changeEvents = [...document.querySelectorAll('#change-events input:checked')].map(i => i.value);
-    state.negotiationGoals = document.getElementById('negotiation-goals').value;
   }
 }
 
@@ -322,7 +311,6 @@ function getDiscountRange(s, leverage) {
   else if (fc?.strength === 'good') { lo += 1; hi += 2; }
 
   if (s.changeEvents?.includes('expansion')) { lo += 1; hi += 3; }
-  if (s.paymentTerms === 'multiyear-upfront' || s.paymentTerms === 'annual-upfront') { hi += 2; }
   if (leverage < 25) { hi -= 3; }
   if (s.adoptionHealth === 'critical') { hi -= 2; }
 
@@ -1031,10 +1019,10 @@ function buildRisks(s, tier, leverage) {
 
 // ─── Strategy generation & export ─────────────────────────────────────────────
 function generateStrategy() {
-  if (!validateStep(4)) return;
-  collectStep(4);
+  if (!validateStep(3)) return;
+  collectStep(3);
   document.getElementById('strategy-output').innerHTML = buildStrategyHTML(state);
-  goToStep(5);
+  goToStep(4);
 }
 
 function printStrategy() { window.print(); }

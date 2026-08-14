@@ -30,35 +30,30 @@
       <div class="step-nav" id="step-nav">
         <div class="step-item active" data-step="1">
           <div class="step-circle">1</div>
-          <div class="step-label">Org Profile</div>
+          <div class="step-label">Contract &amp; Timing</div>
         </div>
         <div class="step-connector"></div>
         <div class="step-item" data-step="2">
           <div class="step-circle">2</div>
-          <div class="step-label">Contract &amp; Spend</div>
+          <div class="step-label">Products &amp; Usage</div>
         </div>
         <div class="step-connector"></div>
         <div class="step-item" data-step="3">
           <div class="step-circle">3</div>
-          <div class="step-label">Products &amp; Usage</div>
+          <div class="step-label">Leverage</div>
         </div>
         <div class="step-connector"></div>
         <div class="step-item" data-step="4">
           <div class="step-circle">4</div>
-          <div class="step-label">Leverage</div>
-        </div>
-        <div class="step-connector"></div>
-        <div class="step-item" data-step="5">
-          <div class="step-circle">5</div>
           <div class="step-label">Your Strategy</div>
         </div>
       </div>
 
-      <!-- ══ Step 1: Org Profile ══ -->
+      <!-- ══ Step 1: Contract & Timing ══ -->
       <section class="step-panel active" id="step-1">
         <div class="panel-header">
-          <h2>Organization Profile</h2>
-          <p>Salesforce prices on seats and segments accounts by size. Start with who you are.</p>
+          <h2>Contract &amp; Timing</h2>
+          <p>Renewal timing against Salesforce's fiscal calendar is the biggest lever available to you. Their fiscal year ends January 31.</p>
         </div>
         <div class="form-grid">
           <div class="form-group">
@@ -89,85 +84,6 @@
 
           <div class="form-row-2">
             <div class="form-group">
-              <label for="industry">Industry Vertical</label>
-              <select id="industry">
-                <option value="">Select industry…</option>
-                <option value="fintech">Financial Services / Insurance</option>
-                <option value="healthcare">Healthcare / Life Sciences</option>
-                <option value="retail">Retail / Consumer Goods</option>
-                <option value="saas">Technology / SaaS</option>
-                <option value="manufacturing">Manufacturing / Industrial</option>
-                <option value="media">Media / Communications</option>
-                <option value="government">Government / Public Sector</option>
-                <option value="education">Education / Nonprofit</option>
-                <option value="energy">Energy / Utilities</option>
-                <option value="proserv">Professional Services</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="headcount-trajectory">Headcount Trajectory (next 12–24 mo)</label>
-              <select id="headcount-trajectory">
-                <option value="">Select…</option>
-                <option value="shrinking">Shrinking — layoffs or restructuring</option>
-                <option value="flat">Flat — no material change</option>
-                <option value="modest">Modest growth (0–10%)</option>
-                <option value="strong">Strong growth (10–30%)</option>
-                <option value="aggressive">Aggressive growth (30%+)</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-row-2">
-            <div class="form-group">
-              <label for="sf-tenure">Salesforce Tenure</label>
-              <select id="sf-tenure">
-                <option value="">Select…</option>
-                <option value="under2">Under 2 years</option>
-                <option value="2-5">2–5 years</option>
-                <option value="5-10">5–10 years</option>
-                <option value="10plus">10+ years</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="primary-edition">Primary Edition</label>
-              <select id="primary-edition">
-                <option value="">Select…</option>
-                <option value="professional">Professional</option>
-                <option value="enterprise">Enterprise</option>
-                <option value="unlimited">Unlimited</option>
-                <option value="einstein1">Einstein 1 / Agentforce</option>
-                <option value="mixed">Mixed across business units</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label>Regulatory / Compliance Constraints</label>
-            <div class="checkbox-group" id="compliance">
-              <label class="checkbox-item"><input type="checkbox" value="hipaa" /> HIPAA</label>
-              <label class="checkbox-item"><input type="checkbox" value="fedramp" /> FedRAMP / GovCloud</label>
-              <label class="checkbox-item"><input type="checkbox" value="gdpr" /> GDPR / EU data residency</label>
-              <label class="checkbox-item"><input type="checkbox" value="pci" /> PCI-DSS</label>
-              <label class="checkbox-item"><input type="checkbox" value="sox" /> SOX / financial controls</label>
-              <label class="checkbox-item"><input type="checkbox" value="none" /> None material</label>
-            </div>
-          </div>
-        </div>
-        <div class="step-actions">
-          <button class="btn-primary" onclick="nextStep(1)">Continue →</button>
-        </div>
-      </section>
-
-      <!-- ══ Step 2: Contract & Spend ══ -->
-      <section class="step-panel" id="step-2">
-        <div class="panel-header">
-          <h2>Contract &amp; Spend</h2>
-          <p>Renewal timing against Salesforce's fiscal calendar is the single biggest lever available to you. Their fiscal year ends January 31.</p>
-        </div>
-        <div class="form-grid">
-          <div class="form-row-2">
-            <div class="form-group">
               <label for="annual-spend">Annual Contract Value (ACV)</label>
               <select id="annual-spend">
                 <option value="">Select ACV…</option>
@@ -182,14 +98,14 @@
               </select>
             </div>
             <div class="form-group">
-              <label for="total-seats">Total Licensed Seats (all clouds)</label>
-              <select id="total-seats">
+              <label for="headcount-trajectory">Headcount Trajectory (next 12–24 mo)</label>
+              <select id="headcount-trajectory">
                 <option value="">Select…</option>
-                <option value="under100">Under 100</option>
-                <option value="100-500">100–500</option>
-                <option value="500-2000">500–2,000</option>
-                <option value="2000-10000">2,000–10,000</option>
-                <option value="10000plus">10,000+</option>
+                <option value="shrinking">Shrinking — layoffs or restructuring</option>
+                <option value="flat">Flat — no material change</option>
+                <option value="modest">Modest growth (0–10%)</option>
+                <option value="strong">Strong growth (10–30%)</option>
+                <option value="aggressive">Aggressive growth (30%+)</option>
               </select>
             </div>
           </div>
@@ -226,32 +142,31 @@
             </div>
           </div>
 
-          <div class="form-row-2">
-            <div class="form-group">
-              <label for="notice-status">Auto-Renewal Notice Window</label>
-              <select id="notice-status">
-                <option value="">Select…</option>
-                <option value="unknown">Don't know what our notice period is</option>
-                <option value="passed">Already passed — auto-renewal triggered</option>
-                <option value="imminent">Closing within 30 days</option>
-                <option value="open">Still open with room to spare</option>
-                <option value="served">Notice already served to Salesforce</option>
-                <option value="none">No auto-renewal clause</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="current-term">Current Contract Term</label>
-              <select id="current-term">
-                <option value="">Select…</option>
-                <option value="1yr">1 year</option>
-                <option value="2yr">2 years</option>
-                <option value="3yr">3 years</option>
-                <option value="3plusyr">More than 3 years</option>
-              </select>
-            </div>
+          <div class="form-group">
+            <label for="notice-status">Auto-Renewal Notice Window</label>
+            <select id="notice-status">
+              <option value="">Select…</option>
+              <option value="unknown">Don't know what our notice period is</option>
+              <option value="passed">Already passed — auto-renewal triggered</option>
+              <option value="imminent">Closing within 30 days</option>
+              <option value="open">Still open with room to spare</option>
+              <option value="served">Notice already served to Salesforce</option>
+              <option value="none">No auto-renewal clause</option>
+            </select>
           </div>
 
           <div class="form-row-2">
+            <div class="form-group">
+              <label for="uplift-cap">Existing Uplift Cap in Contract</label>
+              <select id="uplift-cap">
+                <option value="">Select…</option>
+                <option value="none">No cap — Salesforce sets the number</option>
+                <option value="capped-high">Capped, but above 7%</option>
+                <option value="capped-mid">Capped at 4–7%</option>
+                <option value="capped-low">Capped at 3% or below</option>
+                <option value="unknown">Don't know</option>
+              </select>
+            </div>
             <div class="form-group">
               <label for="last-uplift">Uplift Applied at Last Renewal</label>
               <select id="last-uplift">
@@ -265,50 +180,26 @@
                 <option value="unknown">Don't know</option>
               </select>
             </div>
-            <div class="form-group">
-              <label for="uplift-cap">Existing Uplift Cap in Contract</label>
-              <select id="uplift-cap">
-                <option value="">Select…</option>
-                <option value="none">No cap — Salesforce sets the number</option>
-                <option value="capped-high">Capped, but above 7%</option>
-                <option value="capped-mid">Capped at 4–7%</option>
-                <option value="capped-low">Capped at 3% or below</option>
-                <option value="unknown">Don't know</option>
-              </select>
-            </div>
           </div>
 
-          <div class="form-row-2">
-            <div class="form-group">
-              <label for="desired-term">Desired Term at Renewal</label>
-              <select id="desired-term">
-                <option value="">Select…</option>
-                <option value="1yr">1 year — maximum flexibility</option>
-                <option value="2yr">2 years</option>
-                <option value="3yr">3 years — best pricing leverage</option>
-                <option value="undecided">Undecided — want modelling</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="payment-terms">Current Payment Terms</label>
-              <select id="payment-terms">
-                <option value="">Select…</option>
-                <option value="annual-upfront">Annual, paid upfront</option>
-                <option value="quarterly">Quarterly</option>
-                <option value="monthly">Monthly</option>
-                <option value="multiyear-upfront">Multi-year prepaid</option>
-              </select>
-            </div>
+          <div class="form-group">
+            <label for="desired-term">Desired Term at Renewal</label>
+            <select id="desired-term">
+              <option value="">Select…</option>
+              <option value="1yr">1 year — maximum flexibility</option>
+              <option value="2yr">2 years</option>
+              <option value="3yr">3 years — best pricing leverage</option>
+              <option value="undecided">Undecided — want modelling</option>
+            </select>
           </div>
         </div>
         <div class="step-actions">
-          <button class="btn-secondary" onclick="prevStep(2)">← Back</button>
-          <button class="btn-primary" onclick="nextStep(2)">Continue →</button>
+          <button class="btn-primary" onclick="nextStep(1)">Continue →</button>
         </div>
       </section>
 
-      <!-- ══ Step 3: Products & Usage ══ -->
-      <section class="step-panel" id="step-3">
+      <!-- ══ Step 2: Products & Usage ══ -->
+      <section class="step-panel" id="step-2">
         <div class="panel-header">
           <h2>Product Footprint &amp; Utilization</h2>
           <p>Renewal is the only moment most Salesforce contracts permit reducing licenses. Unused seats are the largest recoverable cost in a typical estate.</p>
@@ -382,24 +273,21 @@
           <div class="form-group">
             <label>Known Cost Pressures</label>
             <div class="checkbox-group" id="cost-pressures">
-              <label class="checkbox-item"><input type="checkbox" value="shelfware" /> Known unused licenses</label>
               <label class="checkbox-item"><input type="checkbox" value="overlap" /> Overlapping tools (duplicate capability)</label>
-              <label class="checkbox-item"><input type="checkbox" value="addons" /> Add-ons bought mid-term at list</label>
               <label class="checkbox-item"><input type="checkbox" value="sandbox" /> Sandbox / storage overages</label>
               <label class="checkbox-item"><input type="checkbox" value="api" /> API call limit overages</label>
               <label class="checkbox-item"><input type="checkbox" value="premier" /> Premier support renewing automatically</label>
-              <label class="checkbox-item"><input type="checkbox" value="none" /> None identified</label>
             </div>
           </div>
         </div>
         <div class="step-actions">
-          <button class="btn-secondary" onclick="prevStep(3)">← Back</button>
-          <button class="btn-primary" onclick="nextStep(3)">Continue →</button>
+          <button class="btn-secondary" onclick="prevStep(2)">← Back</button>
+          <button class="btn-primary" onclick="nextStep(2)">Continue →</button>
         </div>
       </section>
 
-      <!-- ══ Step 4: Leverage ══ -->
-      <section class="step-panel" id="step-4">
+      <!-- ══ Step 3: Leverage ══ -->
+      <section class="step-panel" id="step-3">
         <div class="panel-header">
           <h2>Leverage &amp; Context</h2>
           <p>Salesforce prices against switching cost. What you can credibly do instead determines what you can ask for.</p>
@@ -493,34 +381,20 @@
               <label class="checkbox-item"><input type="checkbox" value="consolidation" /> Consolidating onto Salesforce from other tools</label>
               <label class="checkbox-item"><input type="checkbox" value="migration" /> Evaluating migration away from Salesforce</label>
               <label class="checkbox-item"><input type="checkbox" value="agentforce" /> Salesforce pushing Agentforce / AI adoption</label>
-              <label class="checkbox-item"><input type="checkbox" value="none" /> No material changes</label>
             </div>
-          </div>
-
-          <div class="form-group">
-            <label for="negotiation-goals">Primary Negotiation Goal</label>
-            <select id="negotiation-goals">
-              <option value="">Select primary goal…</option>
-              <option value="cost-reduction">Reduce total cost versus current spend</option>
-              <option value="cap-uplift">Cap future price increases</option>
-              <option value="flexibility">Maximize flexibility to reduce seats later</option>
-              <option value="consolidate">Consolidate contracts and simplify</option>
-              <option value="expansion-value">Get best pricing on planned expansion</option>
-              <option value="balanced">Balanced — cost, terms, and flexibility</option>
-            </select>
           </div>
         </div>
         <div class="step-actions">
-          <button class="btn-secondary" onclick="prevStep(4)">← Back</button>
+          <button class="btn-secondary" onclick="prevStep(3)">← Back</button>
           <button class="btn-primary" onclick="generateStrategy()">Generate My Strategy →</button>
         </div>
       </section>
 
-      <!-- ══ Step 5: Output ══ -->
-      <section class="step-panel" id="step-5">
+      <!-- ══ Step 4: Output ══ -->
+      <section class="step-panel" id="step-4">
         <div id="strategy-output"></div>
         <div class="step-actions" style="margin-top:2rem;">
-          <button class="btn-secondary" onclick="prevStep(5)">← Edit Inputs</button>
+          <button class="btn-secondary" onclick="prevStep(4)">← Edit Inputs</button>
           <button class="btn-primary" onclick="printStrategy()">🖨️ Export Strategy</button>
         </div>
       </section>
