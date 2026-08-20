@@ -126,6 +126,55 @@ document.querySelectorAll('.use-case-card').forEach(card => {
 // ─── Metadata ─────────────────────────────────────────────────────────────────
 const RANGES_LAST_UPDATED = 'August 14, 2026';
 
+/* ─── Published list pricing ──────────────────────────────────────────────────
+   Unlike the discount and uplift ranges elsewhere in this file, these are
+   Salesforce's OWN published figures — verifiable, not estimated. They reflect
+   the ~6% increase to Enterprise and Unlimited editions effective Aug 1, 2025
+   (Sales Cloud, Service Cloud, Field Service, select Industry Clouds), which
+   was Salesforce's first broad list increase in seven years.
+
+   Professional was not part of that increase.
+
+   Re-verify at https://www.salesforce.com/sales/pricing/ — the page blocks
+   automated fetches, so this needs a human eye at each review.
+   ──────────────────────────────────────────────────────────────────────────── */
+const LIST_PRICES = {
+  verifiedOn: 'August 20, 2026',
+  perUserMonth: [
+    { edition: 'Professional', price: 80,  confidence: 'verified' },
+    { edition: 'Enterprise',   price: 175, confidence: 'verified' },
+    { edition: 'Unlimited',    price: 350, confidence: 'derived'  },
+  ],
+  // Same per-user rate applies to both Sales Cloud and Service Cloud.
+  appliesTo: 'Sales Cloud and Service Cloud, billed annually',
+};
+
+function listPriceTableHTML(discount) {
+  const rows = LIST_PRICES.perUserMonth.map(e => {
+    const hi = Math.round(e.price * (1 - discount.lo / 100));
+    const lo = Math.round(e.price * (1 - discount.hi / 100));
+    return `<tr style="border-bottom:1px solid var(--surface-3);">
+      <td style="padding:7px 0;color:var(--text-primary);">${e.edition}${e.confidence === 'derived' ? ' <span style="color:var(--text-muted);font-size:.75rem;">(derived)</span>' : ''}</td>
+      <td style="padding:7px 0;text-align:right;color:var(--text-secondary);font-variant-numeric:tabular-nums;">$${e.price}</td>
+      <td style="padding:7px 0;text-align:right;font-weight:700;color:var(--success);font-variant-numeric:tabular-nums;">$${lo}–$${hi}</td>
+    </tr>`;
+  }).join('');
+
+  return `<div style="margin-top:18px;">
+    <table style="width:100%;border-collapse:collapse;font-size:.82rem;">
+      <thead><tr style="border-bottom:1px solid var(--border);">
+        <th style="text-align:left;padding:6px 0;color:var(--text-secondary);font-weight:600;">Edition (per user / month)</th>
+        <th style="text-align:right;padding:6px 0;color:var(--text-secondary);font-weight:600;">List</th>
+        <th style="text-align:right;padding:6px 0;color:var(--text-secondary);font-weight:600;">Target at ${discount.lo}–${discount.hi}% off</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <p style="margin-top:10px;font-size:.76rem;color:var(--text-muted);line-height:1.6;">
+      ${LIST_PRICES.appliesTo}. List pricing verified ${LIST_PRICES.verifiedOn} and reflects the ~6% Enterprise and Unlimited increase effective August 1, 2025. Unlimited is derived from that increase rather than separately confirmed. <strong>List price is Salesforce's published figure; the target column applies this plan's estimated discount range to it and is not a benchmark.</strong>
+    </p>
+  </div>`;
+}
+
 // ─── Reference tables ─────────────────────────────────────────────────────────
 const ACV_TIERS = {
   'under100k':  { label: 'Under $100K', mid: 75000,    tier: 0 },
@@ -183,14 +232,29 @@ function fiscalContext(month) {
 }
 
 // ─── Deal calibration hook (shared across Proxima planners) ──────────────────
-function getProximaInsight() {
+// Deal Calibration stores Salesforce ACV tiers with an `sf-` prefix so they do
+// not collide with the cloud spend tiers. Planner keys map onto them directly.
+const SF_TO_CAL_TIER = {
+  'under100k': 'sf-under100k', '100k-250k': 'sf-100k-250k', '250k-500k': 'sf-250k-500k',
+  '500k-1m': 'sf-500k-1m', '1m-2500k': 'sf-1m-2500k', '2500k-5m': 'sf-2500k-5m',
+  '5m-10m': 'sf-5m-10m', '10mplus': 'sf-10mplus',
+};
+
+function getProximaInsight(calTier) {
   try {
     const deals = JSON.parse(localStorage.getItem('proxima-deals') || '[]');
     const sf = deals.filter(d => d.provider === 'salesforce');
     if (!sf.length) return null;
-    const discounts = sf.map(d => d.discount).sort((a, b) => a - b);
+    // Prefer same-tier deals once there are enough to mean anything, otherwise
+    // fall back to the whole Salesforce pool and say so in the output.
+    const tierDeals = calTier ? sf.filter(d => d.tier === calTier) : [];
+    const relevant = tierDeals.length >= 2 ? tierDeals : sf;
+    const discounts = relevant.map(d => d.discount).sort((a, b) => a - b);
     const avg = Math.round(discounts.reduce((s, v) => s + v, 0) / discounts.length * 10) / 10;
-    return { count: sf.length, avg, lo: discounts[0], hi: discounts[discounts.length - 1] };
+    return {
+      count: relevant.length, avg, lo: discounts[0], hi: discounts[discounts.length - 1],
+      tierMatch: tierDeals.length >= 2,
+    };
   } catch { return null; }
 }
 
@@ -378,7 +442,7 @@ function buildStrategyHTML(s) {
   const timeline = buildTimeline(s, fc);
   const questions = buildQuestions(s, tier);
   const risks = buildRisks(s, tier, leverage);
-  const proxima = getProximaInsight();
+  const proxima = getProximaInsight(SF_TO_CAL_TIER[s.annualSpend]);
 
   return `
 <div class="strategy-container">
@@ -482,8 +546,9 @@ function buildStrategyHTML(s) {
         </div>
         ${proxima ? `<div style="margin-top:10px;padding:10px 14px;background:rgba(0,161,224,.08);border:1px solid rgba(0,161,224,.25);border-radius:8px;font-size:.82rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
           <span style="font-weight:700;color:#00A1E0;">📊 Proxima Deal Data</span>
-          <span style="color:var(--text-muted);">Based on <strong>${proxima.count} Salesforce deal${proxima.count !== 1 ? 's' : ''}</strong>: observed avg <strong>${proxima.avg}%</strong>, range <strong>${proxima.lo}–${proxima.hi}%</strong></span>
+          <span style="color:var(--text-muted);">Based on <strong>${proxima.count} Salesforce deal${proxima.count !== 1 ? 's' : ''}</strong>${proxima.tierMatch ? ' at this ACV tier' : ' across all tiers'}: observed avg <strong>${proxima.avg}%</strong>, range <strong>${proxima.lo}–${proxima.hi}%</strong></span>
         </div>` : ''}
+        ${listPriceTableHTML(discount)}
       </div>
     </div>
 
@@ -606,7 +671,10 @@ function buildStrategyHTML(s) {
       </div>
       <div class="section-content">
         <p style="font-size:.86rem;line-height:1.75;color:var(--text-secondary);">
-          Salesforce publishes list pricing but does not publish renewal uplift data, discount bands, or negotiated outcomes. Every range in this plan is a directional estimate built from publicly reported procurement practice and Proxima engagement experience — not vendor-confirmed figures. The uplift outlook assumes a typical opening ask in the 7–10% range absent a contractual cap; the discount bands scale with ACV and are adjusted for competitive position, term length, and fiscal timing.
+          <strong>List pricing is verified; everything else is estimated.</strong> The per-edition list figures above are Salesforce's own published rates, confirmed ${LIST_PRICES.verifiedOn}. Salesforce does not publish renewal uplift data, discount bands, or negotiated outcomes, so every percentage in this plan is a directional estimate built from publicly reported procurement practice and Proxima engagement experience. The uplift outlook assumes a typical opening ask in the 7–10% range absent a contractual cap; the discount bands scale with ACV and are adjusted for competitive position, term length, and fiscal timing.
+        </p>
+        <p style="font-size:.86rem;line-height:1.75;color:var(--text-secondary);margin-top:10px;">
+          Third-party SaaS benchmark sources should be read carefully before being quoted. Aggregator "average savings" figures frequently measure reduction against a vendor's <em>initial quote</em> rather than discount off list — a materially different and much smaller number. Several benchmark sites also carry stale list pricing that predates the August 2025 increase, which inflates every discount percentage derived from it.
         </p>
         <p style="font-size:.86rem;line-height:1.75;color:var(--text-secondary);margin-top:10px;">
           Use these as calibration for what to target and where to push, not as figures to quote to a client or to Salesforce. Where a specific number matters to a deal, verify it against the client's own order forms and against observed outcomes logged in Deal Calibration.
