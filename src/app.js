@@ -835,13 +835,32 @@ function buildTactics(s, tier, leverage, fc) {
   if (s.desiredTerm === '3yr' || s.desiredTerm === 'undecided') {
     tactics.push({
       title: 'Price a Multi-Year Term — But Only With Protections Attached',
-      desc: 'A three-year term is worth real discount to Salesforce and typically improves pricing by a few points over a one-year deal. Only trade the flexibility if the term carries protections: a fixed uplift cap for the full period, price-hold on additional seats at the same discount, and at minimum a true-down right at each anniversary. A long term without those protections converts your flexibility into their certainty and gives you nothing back for it.',
+      desc: 'A three-year term is worth real discount to Salesforce and typically improves pricing by a few points over a one-year deal. Only trade the flexibility if the term carries protections: a fixed uplift cap for the full period, price-hold on additional seats at the same discount, a true-down right at each anniversary, and swap rights so the product mix is not frozen alongside the price. A long term without those protections converts your flexibility into their certainty and gives you nothing back for it.',
       impact: 'medium',
     });
   } else if (s.desiredTerm === '1yr') {
     tactics.push({
       title: 'Use the Short Term Deliberately, and Price What It Costs',
       desc: 'A one-year term preserves your ability to react but gives up the discount a longer commitment would buy, and it puts you back at the table every twelve months — which favors Salesforce if your utilization is drifting. Ask the account team to price both a one-year and a three-year structure side by side so the flexibility premium is explicit. If the gap is small, the short term is worth it; if it is large, the multi-year with protections is usually the better deal.',
+      impact: 'medium',
+    });
+  }
+
+  // 6b. Swap rights — the answer to committing on a mix you are not sure of
+  const mixUncertain = (s.products?.length || 0) >= 3
+    || s.adoptionHealth === 'mixed' || s.adoptionHealth === 'poor'
+    || s.changeEvents?.includes('agentforce')
+    || s.changeEvents?.includes('consolidation');
+  const longTerm = s.desiredTerm === '3yr' || s.desiredTerm === '2yr' || s.desiredTerm === 'undecided';
+  if (mixUncertain || longTerm) {
+    tactics.push({
+      title: 'Negotiate Swap Rights So the Mix Is Not Frozen for the Term',
+      desc: 'A Salesforce agreement locks not just how many licenses you hold but which ones. If the business shifts toward service, or an edition turns out to be over-specified, or a cloud fails to land, you keep paying for the original mix and buy the replacement on top. Swap rights are the fix: the contractual right to exchange licenses for a different product, edition, or user type during the term without renegotiating the agreement. Ask for three specifically — product swap between clouds, edition swap between tiers, and user-type swap from full to platform or community licenses — because a right granted on only one of the three is easy to give and rarely the one you need. Salesforce will resist, so raise it early and treat it as a condition of any multi-year term rather than a late add.',
+      impact: (mixUncertain && longTerm) ? 'high' : 'medium',
+    });
+    tactics.push({
+      title: 'Watch the Three Clauses That Hollow Out a Swap Right',
+      desc: 'Swap language is frequently granted in a form that cannot be used. First, "equal or greater value" means you may only swap upward — push for dollar-neutral exchange at minimum, and for credit where you swap down. Second, swaps priced at then-current list quietly erode your negotiated discount every time you use one; require that swapped licenses carry the same discount as the originals. Third, an unstated cap or a single annual window can make the right theoretical — pin the percentage of contract value eligible (10–25% is a realistic ask) and how often it can be exercised. Get all of it onto the order form; swap rights described verbally by an account executive are not enforceable.',
       impact: 'medium',
     });
   }
@@ -910,6 +929,7 @@ function buildConcessions(s, tier) {
   c.push({ icon: '🧢', title: 'Uplift Cap', desc: 'A written maximum on renewal increase — target 3% or lower — expressed against total order form value, not per-unit list price.', priority: 'must' });
   c.push({ icon: '📉', title: 'True-Down Right', desc: 'The right to reduce seat count at each anniversary, typically 10–20% without penalty. Without this, every seat is locked for the full term.', priority: 'must' });
   c.push({ icon: '🔒', title: 'Price Hold on Additions', desc: 'Additional licenses of any product on the order form available at the same discount for the full term, with no renegotiation required.', priority: 'must' });
+  c.push({ icon: '🔁', title: 'Swap Rights', desc: 'The right to exchange licenses for a different product, edition, or user type mid-term — dollar-neutral, at your negotiated discount, with the eligible percentage of contract value stated.', priority: 'must' });
   c.push({ icon: '📅', title: 'Extended Notice Period', desc: 'Widen the non-renewal notice window to 90 days so a missed date cannot trigger an automatic rollover at their number.', priority: 'should' });
 
   if (s.contractStructure === 'staggered' || s.contractStructure === 'cotermed') {
@@ -1021,6 +1041,7 @@ function buildQuestions(s, tier) {
   q.push('If we reduce seat count to match actual usage, what does the renewal look like?');
   q.push('Can we get line-item pricing per product and per seat rather than a bundled figure?');
   q.push('What discount applies to additional licenses purchased mid-term, and will you hold it in writing for the full term?');
+  q.push('If our product mix changes, can we swap licenses between clouds, editions, or user types mid-term — at what value basis, up to what percentage of contract value, and how often?');
 
   if (s.contractStructure === 'staggered' || s.contractStructure === 'unknown') {
     q.push('What would it take to co-term all of our order forms onto a single renewal date?');
@@ -1065,7 +1086,7 @@ function buildRisks(s, tier, leverage) {
     r.push({ level: 'medium', title: 'Long Term From a Weak Position', desc: 'A three-year commitment negotiated from limited leverage locks in terms you would not accept with more runway. If the position cannot be improved before signature, a shorter term while you build an alternative is often the better trade.' });
   }
   if ((s.products?.length || 0) >= 5) {
-    r.push({ level: 'medium', title: 'Bundle Lock-In', desc: `With ${s.products.length} products in one agreement, dropping any single component typically requires reopening the whole contract. Line-item pricing and separately terminable products are what preserve your ability to unwind later.` });
+    r.push({ level: 'medium', title: 'Bundle Lock-In', desc: `With ${s.products.length} products in one agreement, dropping any single component typically requires reopening the whole contract. Line-item pricing, separately terminable products, and swap rights are what preserve your ability to unwind later — swap rights in particular turn a stranded product into budget you can redirect rather than spend you keep paying.` });
   }
   if (s.contractStructure === 'staggered') {
     r.push({ level: 'medium', title: 'Fragmented Negotiating Position', desc: 'Staggered dates mean you never negotiate at full spend, while Salesforce always sees the full account. Each renewal is conducted at a fraction of your real leverage.' });
