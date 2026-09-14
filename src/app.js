@@ -1153,11 +1153,11 @@ const SAMPLE_STATE = {
   ]
 };
 
-function sampleBannerHTML() {
+function sampleBannerHTML(fromForm) {
   return `<div class="sample-banner" role="note">
     <span class="sample-tag">SAMPLE</span>
     <div><strong>Sample output — illustrative data, not a client analysis.</strong>
-    Generated from a fixed example profile: ${SAMPLE_PROFILE}, 3-year term, renewal 6–12 months out.
+    ${fromForm ? 'Built using the Fill Sample Data buttons — inputs may have been edited since.' : 'Generated from a fixed example profile: ' + SAMPLE_PROFILE + ', 3-year term, renewal 6–12 months out.'}
     Proxima deal calibration data is excluded. Use <em>Edit Inputs</em> to build a real strategy.</div>
   </div>`;
 }
@@ -1176,3 +1176,80 @@ function showSample() {
   document.body.classList.add('is-sample');
   goToStep(4);
 }
+
+// ─── Per-screen sample fill ─────────────────────────────────────────────────
+// Each input screen has a "Fill Sample Data" button that populates that screen
+// from SAMPLE_STATE, so the tool can be demonstrated step by step. Any strategy
+// generated after a sample fill is marked as sample output, even if some fields
+// were edited afterwards — a demo must never pass for a client analysis.
+const sampleFilledSteps = new Set();
+const OUTPUT_STEP = document.querySelectorAll('.step-panel').length;
+
+function toCamel(id) { return id.replace(/-([a-z0-9])/g, (_, c) => c.toUpperCase()); }
+
+function fillSampleStep(n, btn) {
+  const panel = document.getElementById('step-' + n);
+  if (!panel) return;
+  const val = id => SAMPLE_STATE[toCamel(id)];
+
+  panel.querySelectorAll('select[id]').forEach(el => {
+    const v = val(el.id);
+    if (v === undefined) return;
+    el.value = v;
+    el.style.borderColor = '';
+    el.dispatchEvent(new Event('change', { bubbles: true }));
+  });
+  panel.querySelectorAll('.radio-cards[id]').forEach(g => {
+    const v = val(g.id);
+    if (v === undefined) return;
+    g.querySelectorAll('.radio-card').forEach(c => c.classList.toggle('selected', c.dataset.value === v));
+    g.style.outline = '';
+  });
+  panel.querySelectorAll('.use-case-grid[id]').forEach(g => {
+    const v = val(g.id);
+    if (!Array.isArray(v)) return;
+    g.querySelectorAll('.use-case-card').forEach(c => c.classList.toggle('selected', v.includes(c.dataset.value)));
+  });
+  panel.querySelectorAll('.checkbox-group[id]').forEach(g => {
+    const v = val(g.id);
+    if (!Array.isArray(v)) return;
+    g.querySelectorAll('input[type=checkbox]').forEach(i => { i.checked = v.includes(i.value); });
+  });
+  // Some checkbox sets are grouped by class rather than by a container id.
+  panel.querySelectorAll('input[type=checkbox][class]').forEach(i => {
+    const v = SAMPLE_STATE[toCamel(i.className.split(' ')[0])];
+    if (Array.isArray(v)) i.checked = v.includes(i.value);
+  });
+
+  sampleFilledSteps.add(n);
+  if (btn) {
+    const label = btn.textContent;
+    btn.textContent = '✓ Sample data filled';
+    btn.disabled = true;
+    setTimeout(() => { btn.textContent = label; btn.disabled = false; }, 1400);
+  }
+}
+
+const realGenerateStrategy = generateStrategy;
+generateStrategy = function () {
+  const usingSample = sampleFilledSteps.size > 0;
+  const realInsight = getProximaInsight;
+  if (usingSample) getProximaInsight = () => null;  // keep real deal data out of demos
+  try {
+    realGenerateStrategy();
+  } finally {
+    getProximaInsight = realInsight;
+  }
+  if (usingSample && currentStep === OUTPUT_STEP) {
+    const out = document.getElementById('strategy-output');
+    out.innerHTML = sampleBannerHTML(true) + out.innerHTML;
+    document.body.classList.add('is-sample');
+  }
+};
+
+const realShowSample = showSample;
+showSample = function () {
+  // Fill the form too, so "Edit Inputs" shows the sample rather than blank fields.
+  for (let i = 1; i < OUTPUT_STEP; i++) fillSampleStep(i);
+  realShowSample();
+};

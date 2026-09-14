@@ -634,3 +634,5 @@ body.is-sample .strategy-hero h2::after { content:' — Sample'; color:#FBBF24; 
   body.is-sample::before { content:'SAMPLE DATA'; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%) rotate(-32deg); font-size:110px; font-weight:800; letter-spacing:.06em; color:rgba(217,119,6,.10); z-index:9999; pointer-events:none; white-space:nowrap; }
   body.is-sample .print-proxima-header::after { content:'SAMPLE DATA — NOT A CLIENT ANALYSIS'; margin-left:auto; font-size:11px; font-weight:800; letter-spacing:.08em; color:#B45309; }
 }
+
+.btn-sample-fill { border-style: dashed !important; }
