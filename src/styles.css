@@ -636,3 +636,14 @@ body.is-sample .strategy-hero h2::after { content:' — Sample'; color:#FBBF24; 
 }
 
 .btn-sample-fill { border-style: dashed !important; }
+
+/* ── Compact header on phones ──
+   The two taglines wrap into a tall column on narrow screens, and the header
+   is sticky, so it held close to half the viewport. The Proxima-use notice
+   also appears on the strategy output, so hiding the taglines loses nothing. */
+@media (max-width: 640px) {
+  .header-inner { padding: 10px 16px; gap: 10px; }
+  .header-taglines { display: none; }
+  .logo { font-size: .95rem; gap: 8px; white-space: normal; line-height: 1.25; }
+  .logo svg { width: 70px; height: auto; flex-shrink: 0; }
+}
