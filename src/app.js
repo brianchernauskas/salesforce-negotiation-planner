@@ -957,6 +957,8 @@ function buildConcessions(s, tier) {
   c.push({ icon: '🎓', title: 'Training & Enablement Credits', desc: 'Trailhead Academy credits or funded enablement days included, particularly valuable where adoption is uneven.', priority: 'nice' });
   c.push({ icon: '💳', title: 'Payment Terms', desc: 'Net-60 or better, or quarterly billing in place of annual prepayment to improve working capital.', priority: 'nice' });
 
+  c.push({ icon: '📌', title: 'Pricing Schedule Freeze', desc: "Order form rates fixed at signature, with any reference to Salesforce’s published pricing pinned to a dated snapshot. Salesforce raised Enterprise and Unlimited list ~6% in August 2025 — a reference to the live page lets that kind of change flow straight into your agreement.", priority: 'must' });
+  c.push({ icon: '📉', title: 'Price-Down (MFN) Trigger', desc: "If Salesforce reduces list price on a product you hold, the lower price applies at your negotiated discount. Core list prices rarely fall, so this matters most for AI products such as Agentforce, where pricing is still moving.", priority: 'should' });
   return c;
 }
 
@@ -1108,6 +1110,7 @@ function buildRisks(s, tier, leverage) {
 
 // ─── Strategy generation & export ─────────────────────────────────────────────
 function generateStrategy() {
+  document.body.classList.remove('is-sample');
   if (!validateStep(3)) return;
   collectStep(3);
   document.getElementById('strategy-output').innerHTML = buildStrategyHTML(state);
@@ -1115,3 +1118,61 @@ function generateStrategy() {
 }
 
 function printStrategy() { window.print(); }
+
+// ─── Sample output ──────────────────────────────────────────────────────────
+// A fixed, illustrative client profile so advisors can show what the planner
+// produces without filling in the form. Kept deliberately consistent across the
+// AWS, Azure, GCP, and Salesforce planners.
+const SAMPLE_PROFILE = "Mid-market SaaS company · $1M–$2.5M Salesforce ACV";
+const SAMPLE_STATE = {
+  "companySize": "midmarket",
+  "annualSpend": "1m-2500k",
+  "headcountTrajectory": "modest",
+  "renewalMonth": "10",
+  "renewalTimeline": "6-12mo",
+  "noticeStatus": "open",
+  "upliftCap": "none",
+  "lastUplift": "5-10",
+  "desiredTerm": "3yr",
+  "products": [
+    "sales",
+    "service"
+  ],
+  "licenseUtilization": "75-90",
+  "contractStructure": "cotermed",
+  "supportTier": "premier",
+  "adoptionHealth": "good",
+  "costPressures": [],
+  "alternative": "theoretical",
+  "alternativeVendor": "dynamics",
+  "relationshipQuality": "moderate",
+  "previousNegotiation": "moderate",
+  "internalChampion": "procurement",
+  "changeEvents": [
+    "expansion"
+  ]
+};
+
+function sampleBannerHTML() {
+  return `<div class="sample-banner" role="note">
+    <span class="sample-tag">SAMPLE</span>
+    <div><strong>Sample output — illustrative data, not a client analysis.</strong>
+    Generated from a fixed example profile: ${SAMPLE_PROFILE}, 3-year term, renewal 6–12 months out.
+    Proxima deal calibration data is excluded. Use <em>Edit Inputs</em> to build a real strategy.</div>
+  </div>`;
+}
+
+function showSample() {
+  Object.keys(state).forEach(k => delete state[k]);
+  Object.assign(state, JSON.parse(JSON.stringify(SAMPLE_STATE)));
+  // Never let real logged deals appear inside sample output.
+  const realInsight = getProximaInsight;
+  getProximaInsight = () => null;
+  try {
+    document.getElementById('strategy-output').innerHTML = sampleBannerHTML() + buildStrategyHTML(state);
+  } finally {
+    getProximaInsight = realInsight;
+  }
+  document.body.classList.add('is-sample');
+  goToStep(4);
+}
