@@ -128,22 +128,34 @@ const RANGES_LAST_UPDATED = 'August 14, 2026';
 
 /* ─── Published list pricing ──────────────────────────────────────────────────
    Unlike the discount and uplift ranges elsewhere in this file, these are
-   Salesforce's OWN published figures — verifiable, not estimated. They reflect
-   the ~6% increase to Enterprise and Unlimited editions effective Aug 1, 2025
+   Salesforce's OWN published figures — verifiable, not estimated. Professional,
+   Enterprise, and Unlimited reflect the ~6% increase effective Aug 1, 2025
    (Sales Cloud, Service Cloud, Field Service, select Industry Clouds), which
-   was Salesforce's first broad list increase in seven years.
+   was Salesforce's first broad list increase in seven years. Professional was
+   not part of that increase.
 
-   Professional was not part of that increase.
+   On Sept 3, 2026 Salesforce announced Core, Advanced, and Max editions,
+   replacing Enterprise and Unlimited (and the Agentforce 1 Edition) for NEW
+   sales. Each bundles Agentforce, Slack, Tableau Next analytics, and a Premier
+   Success Plan into the seat price, with a Flex Credit allowance (500K / 1M /
+   2.75M respectively) in place of separately purchased add-ons. Salesforce says
+   existing Enterprise/Unlimited customers keep legacy pricing for now, so both
+   sets of rows are kept here — Enterprise/Unlimited for accounts not yet
+   migrated, Core/Advanced/Max for new business or accounts being pitched a
+   migration at renewal.
 
    Re-verify at https://www.salesforce.com/sales/pricing/ — the page blocks
    automated fetches, so this needs a human eye at each review.
    ──────────────────────────────────────────────────────────────────────────── */
 const LIST_PRICES = {
-  verifiedOn: 'August 20, 2026',
+  verifiedOn: 'September 16, 2026',
   perUserMonth: [
     { edition: 'Professional', price: 80,  confidence: 'verified' },
     { edition: 'Enterprise',   price: 175, confidence: 'verified' },
     { edition: 'Unlimited',    price: 350, confidence: 'derived'  },
+    { edition: 'Core',         price: 195, confidence: 'verified' },
+    { edition: 'Advanced',     price: 395, confidence: 'verified' },
+    { edition: 'Max',          price: 550, confidence: 'verified' },
   ],
   // Same per-user rate applies to both Sales Cloud and Service Cloud.
   appliesTo: 'Sales Cloud and Service Cloud, billed annually',
@@ -730,6 +742,8 @@ function discountBreakdownHTML(s, tier, fc, leverage) {
 // ─── Alerts ───────────────────────────────────────────────────────────────────
 function buildAlerts(s, tier, leverage, fc) {
   const alerts = [];
+
+  alerts.push({ type: 'info', icon: '📦', text: '<strong>Salesforce replaced Enterprise and Unlimited with Core, Advanced, and Max editions (Sept 3, 2026).</strong> New sales now go through Core ($195), Advanced ($395), and Max ($550) per user/month, each bundling Agentforce, Slack, Tableau Next-based analytics, and a Premier Success Plan with a Flex Credit allowance (500K / 1M / 2.75M respectively) that used to be separate purchases. Salesforce says existing Enterprise/Unlimited pricing holds for current customers, but expect your account team to pitch a migration to Core/Advanced/Max at this renewal as a simplification. Price the bundle against what you actually spend today on Agentforce, Slack, and analytics add-ons before agreeing — it can be a real saving or a disguised uplift depending on how much of the Flex Credit allowance you would actually use.' });
 
   if (s.noticeStatus === 'passed') {
     alerts.push({ type: 'danger', icon: '🚨', text: '<strong>Auto-renewal notice window has passed.</strong> Your contract may have already renewed at Salesforce\'s stated uplift. Pull the order form today and confirm the exact notice language and renewal date. If it has auto-renewed, your remaining routes are a mutual amendment, negotiating the <em>next</em> cycle now while there is runway, or trading an expansion purchase for retroactive relief. Do not assume the renewal is final until you have read the clause.' });
