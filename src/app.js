@@ -124,7 +124,7 @@ document.querySelectorAll('.use-case-card').forEach(card => {
 });
 
 // ─── Metadata ─────────────────────────────────────────────────────────────────
-const RANGES_LAST_UPDATED = 'August 14, 2026';
+const RANGES_LAST_UPDATED = 'September 16, 2026';
 
 /* ─── Published list pricing ──────────────────────────────────────────────────
    Unlike the discount and uplift ranges elsewhere in this file, these are
@@ -369,9 +369,14 @@ function getUpliftOutlook(s, leverage) {
 // ─── Discount-off-list model ──────────────────────────────────────────────────
 function getDiscountRange(s, leverage) {
   const tier = ACV_TIERS[s.annualSpend]?.tier ?? 0;
+  // Top tiers anchored on a Proxima-observed data point (Sept 2026): a
+  // 12,000-user Sales + Service Cloud Unlimited estate at 79–81% off list,
+  // roughly $10M+ ACV net. Large seat counts on Unlimited discount far more
+  // steeply than the lower tiers, so the $2.5M+ bands step up faster. Tiers
+  // 5–6 are interpolated between that point and the unchanged lower tiers.
   const base = [
     [5, 15], [10, 20], [15, 25], [20, 30],
-    [25, 35], [30, 40], [35, 45], [40, 50],
+    [25, 35], [33, 45], [45, 58], [55, 68],
   ][tier] || [5, 15];
 
   let [lo, hi] = base;
@@ -392,9 +397,10 @@ function getDiscountRange(s, leverage) {
 
   // Ceiling the stack. Modifiers should shift the band, not compound into a
   // number no account team would recognize — cap the top at 12 points above
-  // the tier's base ceiling.
+  // the tier's base ceiling (14 at $10M+, so a strong top-tier deal can reach
+  // the ~80% observed in practice).
   lo = Math.max(0, Math.round(lo));
-  hi = Math.min(Math.round(hi), base[1] + 12);
+  hi = Math.min(Math.round(hi), base[1] + (tier === 7 ? 14 : 12));
   hi = Math.max(lo + 3, hi);
   return { lo, hi, midpoint: Math.round((lo + hi) / 2) };
 }
@@ -683,7 +689,7 @@ function buildStrategyHTML(s) {
       </div>
       <div class="section-content">
         <p style="font-size:.86rem;line-height:1.75;color:var(--text-secondary);">
-          <strong>List pricing is verified; everything else is estimated.</strong> The per-edition list figures above are Salesforce's own published rates, confirmed ${LIST_PRICES.verifiedOn}. Salesforce does not publish renewal uplift data, discount bands, or negotiated outcomes, so every percentage in this plan is a directional estimate built from publicly reported procurement practice and Proxima engagement experience. The uplift outlook assumes a typical opening ask in the 7–10% range absent a contractual cap; the discount bands scale with ACV and are adjusted for competitive position, term length, and fiscal timing.
+          <strong>List pricing is verified; everything else is estimated.</strong> The per-edition list figures above are Salesforce's own published rates, confirmed ${LIST_PRICES.verifiedOn}. Salesforce does not publish renewal uplift data, discount bands, or negotiated outcomes, so every percentage in this plan is a directional estimate built from publicly reported procurement practice and Proxima engagement experience. The uplift outlook assumes a typical opening ask in the 7–10% range absent a contractual cap; the discount bands scale with ACV and are adjusted for competitive position, term length, and fiscal timing. The $5M+ bands are anchored on an observed enterprise outcome of roughly 80% off list for a 12,000-user Sales and Service Cloud Unlimited estate.
         </p>
         <p style="font-size:.86rem;line-height:1.75;color:var(--text-secondary);margin-top:10px;">
           Third-party SaaS benchmark sources should be read carefully before being quoted. Aggregator "average savings" figures frequently measure reduction against a vendor's <em>initial quote</em> rather than discount off list — a materially different and much smaller number. Several benchmark sites also carry stale list pricing that predates the August 2025 increase, which inflates every discount percentage derived from it.
