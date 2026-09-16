@@ -590,7 +590,6 @@ select:focus, input[type="text"]:focus {
   .step-panel { display: none !important; }
   .step-panel.active { display: block !important; }
   body { background: #fff; }
-  .strategy-hero { background: var(--aws-dark) !important; -webkit-print-color-adjust: exact; }
   .print-proxima-header { display: flex !important; }
   .proxima-strategy-footer {
     color: #444 !important;
@@ -646,4 +645,26 @@ body.is-sample .strategy-hero h2::after { content:' — Sample'; color:#FBBF24; 
   .header-taglines { display: none; }
   .logo { font-size: .95rem; gap: 8px; white-space: normal; line-height: 1.25; }
   .logo svg { width: 70px; height: auto; flex-shrink: 0; }
+}
+
+/* ── Print-safe strategy output ──
+   The hero is white text on a dark gradient. In print that gradient depended on
+   "Background graphics" being enabled (and on a colour variable some planners
+   never defined), so the title, subtitle, and score labels printed white on
+   white. Print the hero as dark text on white instead, so it never depends on
+   background printing. Also stop the panel fade-in from printing a mid-animation
+   frame, and keep cards from splitting across pages. */
+@media print {
+  .step-panel.active { animation: none !important; }
+  .strategy-container, .strategy-section { overflow: visible !important; }
+  .strategy-hero { background: #fff !important; color: #111827 !important; padding: 18px 4px 16px !important; border-bottom: 2px solid #D1D5DB; }
+  .strategy-hero::after { display: none !important; }
+  .strategy-hero h2 { color: #111827 !important; }
+  .strategy-hero .subtitle, .strategy-hero > div:not(.score-row) { color: #4B5563 !important; }
+  .score-pill { background: #F9FAFB !important; border: 1px solid #D1D5DB !important; }
+  .score-pill .pill-label { color: #6B7280 !important; }
+  .score-pill .pill-value:not([style]) { color: #111827 !important; }
+  body.is-sample .strategy-hero h2::after { color: #B45309 !important; }
+  .tactic-card, .concession-card, .risk-card, .alert, .timeline-item, .question-item, .discount-estimate, .exposure-card, tr { break-inside: avoid; }
+  .section-header { break-after: avoid; }
 }
